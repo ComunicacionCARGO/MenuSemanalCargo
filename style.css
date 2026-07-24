@@ -1,0 +1,535 @@
+/* ============================================================
+   style.css
+   Diseño moderno, corporativo y minimalista.
+   Todos los colores están centralizados en :root para poder
+   personalizar la identidad visual desde un único lugar.
+   ============================================================ */
+
+:root {
+  --primary: #6C5CE7;        /* Color principal: botones, acentos, selects activos */
+  --primary-dark: #5847d1;   /* Hover/estado activo del color principal */
+  --primary-light: #EDEBFD;  /* Fondos suaves relacionados al primario (chips, hover de tarjetas) */
+  --secondary: #FF8A3D;      /* Color secundario: detalles, etiqueta "Menú", iconos destacados */
+  --background: #F4F5FA;     /* Fondo general de la app */
+  --text: #1F2430;           /* Color de texto principal */
+  --text-muted: #6B7280;     /* Texto secundario: fechas, ayudas, subtítulos */
+  --success: #22C55E;        /* Confirmaciones, pantalla de agradecimiento */
+  --danger: #EF4444;         /* Errores de validación, pedidos duplicados */
+  --card: #FFFFFF;           /* Fondo de tarjetas y modales */
+  --button-text: #FFFFFF;    /* Color de texto sobre botones de color */
+  --border: #E5E7EB;         /* Bordes sutiles de inputs y tarjetas */
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 4px 20px rgba(31, 36, 48, 0.06);
+  --shadow-card: 0 10px 30px rgba(31, 36, 48, 0.08);
+  --shadow-modal: 0 20px 60px rgba(31, 36, 48, 0.25);
+
+  --font-main: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  color-scheme: light;
+}
+
+/* -------- Modo oscuro: mismas variables, otros valores -------- */
+[data-theme="dark"] {
+  --primary: #8B7CF6;
+  --primary-dark: #A296F8;
+  --primary-light: #2A2650;
+  --secondary: #FFA35C;
+  --background: #14151F;
+  --text: #F1F2F6;
+  --text-muted: #9AA0AC;
+  --success: #34D399;
+  --danger: #F87171;
+  --card: #1E2030;
+  --button-text: #FFFFFF;
+  --border: #2E3142;
+
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
+
+/* ================= Reset & base ================= */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--background);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 700; }
+p { margin: 0; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Foco visible para accesibilidad con teclado */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.hidden { display: none !important; }
+
+/* ================= Layout general ================= */
+#app {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px 80px;
+}
+
+.screen { width: 100%; max-width: 720px; }
+.screen:not(.active) { display: none; }
+
+/* Pantalla 1 centrada verticalmente */
+#screen-select {
+  min-height: calc(100vh - 104px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ================= Tarjetas ================= */
+.card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 40px 32px;
+  animation: fadeSlideUp 0.4s ease;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.select-card {
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.brand-icon {
+  font-size: 30px;
+  color: var(--primary);
+  background: var(--primary-light);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+}
+
+.select-card h1 { font-size: 24px; }
+
+.subtitle {
+  color: var(--text-muted);
+  margin: 8px 0 28px;
+  font-size: 15px;
+}
+
+/* ================= Campos de formulario ================= */
+.field { text-align: left; margin-bottom: 18px; }
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+}
+
+.select-wrapper { position: relative; }
+
+select,
+input[type="text"] {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--background);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  appearance: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select { padding-right: 42px; cursor: pointer; }
+
+select:focus,
+input[type="text"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+  outline: none;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 13px;
+}
+
+.field-error {
+  display: block;
+  min-height: 16px;
+  color: var(--danger);
+  font-size: 12.5px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.form-general-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* ================= Botones ================= */
+.btn {
+  border: none;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.2px;
+  padding: 15px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-large { width: 100%; }
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--button-text);
+  box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.btn-secondary:hover { background: var(--border); }
+
+.icon-btn {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  box-shadow: var(--shadow-soft);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.icon-btn:hover { transform: translateY(-1px); }
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 50;
+}
+
+/* ================= Pantalla de menú ================= */
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.menu-header-text h1 { font-size: 22px; }
+.muted { color: var(--text-muted); font-size: 13.5px; }
+
+.last-updated {
+  margin: 6px 0 20px 56px;
+  font-size: 12.5px;
+}
+
+.menu-days {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 100px;
+}
+
+.day-card {
+  background: var(--card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: 20px 22px;
+  animation: fadeSlideUp 0.35s ease;
+}
+
+.day-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.day-card-header .day-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.day-card-header .day-date {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.day-options { display: flex; flex-direction: column; gap: 8px; }
+
+.day-option {
+  font-size: 14px;
+  line-height: 1.5;
+  padding-left: 22px;
+  position: relative;
+}
+
+.day-option::before {
+  content: "\f2e7";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font-size: 11px;
+  color: var(--primary);
+}
+
+.btn-floating {
+  position: fixed;
+  bottom: 20px;
+  left: 16px;
+  right: 16px;
+  max-width: 688px;
+  margin: 0 auto;
+  z-index: 40;
+}
+
+/* ================= Estados: carga y error ================= */
+.loading-state, .error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.error-state i { font-size: 30px; color: var(--danger); }
+
+.spinner {
+  width: 34px;
+  height: 34px;
+  border: 3.5px solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ================= Modal de formulario ================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 21, 31, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-card {
+  background: var(--card);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 30px 28px 34px;
+  position: relative;
+  animation: slideUpModal 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-card h2 {
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  color: var(--primary);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+@media (min-width: 640px) {
+  .modal-overlay { align-items: center; }
+  .modal-card { border-radius: var(--radius-lg); }
+}
+
+/* ================= Pantalla de agradecimiento ================= */
+.screen-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 16px;
+}
+
+.thanks-card {
+  max-width: 420px;
+  text-align: center;
+}
+
+.thanks-icon {
+  font-size: 56px;
+  color: var(--success);
+  margin-bottom: 18px;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.thanks-card h1 { font-size: 22px; margin-bottom: 10px; }
+.thanks-card p#thankYouMessage { color: var(--text-muted); margin-bottom: 22px; }
+
+.countdown-text {
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.countdown-text a#backLink {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.countdown-text a#backLink:hover { text-decoration: underline; }
+
+/* ================= Toast ================= */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--card);
+  padding: 13px 22px;
+  border-radius: var(--radius-pill);
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-modal);
+  z-index: 300;
+  max-width: 90vw;
+  text-align: center;
+  animation: fadeSlideUp 0.25s ease;
+}
+
+.toast.toast-error { background: var(--danger); }
+.toast.toast-success { background: var(--success); }
+
+/* ================= Responsive ================= */
+@media (min-width: 900px) {
+  .menu-days { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .btn-floating { max-width: 400px; }
+}
+
+@media (max-width: 380px) {
+  .card { padding: 30px 22px; }
+  .modal-card { padding: 26px 20px 30px; }
+}

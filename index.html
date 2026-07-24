@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Menú semanal</title>
+
+<!-- Tipografía Montserrat -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Botón de modo oscuro, visible en todas las pantallas -->
+<button id="darkModeToggle" class="icon-btn theme-toggle" aria-label="Cambiar modo oscuro/claro" title="Modo oscuro">
+  <i class="fa-solid fa-moon"></i>
+</button>
+
+<main id="app">
+
+  <!-- ============================================================
+       PANTALLA 1: Selección de operación
+       ============================================================ -->
+  <section id="screen-select" class="screen active">
+    <div class="card select-card">
+      <div class="brand">
+        <i class="fa-solid fa-utensils brand-icon"></i>
+        <h1 id="appTitle">Menú semanal</h1>
+      </div>
+      <p class="subtitle" id="selectPrompt">Elegí tu operación</p>
+
+      <div class="field">
+        <label for="operationSelect">Operación</label>
+        <div class="select-wrapper">
+          <select id="operationSelect">
+            <option value="" selected disabled>Seleccioná una opción...</option>
+          </select>
+          <i class="fa-solid fa-chevron-down select-arrow"></i>
+        </div>
+      </div>
+
+      <button id="continueBtn" class="btn btn-primary btn-large" disabled>
+        <span id="continueBtnLabel">Continuar</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA 2: Menú semanal
+       ============================================================ -->
+  <section id="screen-menu" class="screen">
+    <div class="menu-header">
+      <button id="backToSelect" class="icon-btn" aria-label="Volver a elegir operación" title="Cambiar operación">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <div class="menu-header-text">
+        <h1 id="operationName">Operación</h1>
+        <p id="menuDateRange" class="muted"></p>
+      </div>
+    </div>
+
+    <p id="lastUpdated" class="last-updated muted"></p>
+
+    <div id="loadingMenu" class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando el menú...</p>
+    </div>
+
+    <div id="menuError" class="error-state hidden">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <p id="menuErrorText">No pudimos cargar el menú. Intentá nuevamente.</p>
+      <button id="retryMenuBtn" class="btn btn-secondary">Reintentar</button>
+    </div>
+
+    <div id="menuDaysContainer" class="menu-days hidden"></div>
+
+    <button id="requestMenuBtn" class="btn btn-primary btn-large btn-floating hidden">
+      <i class="fa-solid fa-clipboard-list"></i>
+      <span id="requestMenuBtnLabel">Solicitar menú</span>
+    </button>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     MODAL: Formulario de pedido (solo operaciones con mode: "form")
+     ============================================================ -->
+<div id="orderModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <button id="closeModal" class="icon-btn modal-close" aria-label="Cerrar formulario">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <h2><i class="fa-solid fa-clipboard-list"></i> Solicitar menú</h2>
+
+    <form id="orderForm" novalidate>
+      <div class="field">
+        <label for="dayField">Día</label>
+        <div class="select-wrapper">
+          <select id="dayField" required></select>
+          <i class="fa-solid fa-chevron-down select-arrow"></i>
+        </div>
+        <span class="field-error" id="dayFieldError"></span>
+      </div>
+
+      <div class="field">
+        <label for="nameField">Nombre y apellido</label>
+        <input type="text" id="nameField" placeholder="Ej: Juan Pérez" required autocomplete="name" />
+        <span class="field-error" id="nameFieldError"></span>
+      </div>
+
+      <div class="field">
+        <label for="legajoField">Legajo</label>
+        <input type="text" inputmode="numeric" id="legajoField" placeholder="Ej: 12345" required />
+        <span class="field-error" id="legajoFieldError"></span>
+      </div>
+
+      <div class="field">
+        <label for="comidaField">Opción de comida</label>
+        <div class="select-wrapper">
+          <select id="comidaField" required></select>
+          <i class="fa-solid fa-chevron-down select-arrow"></i>
+        </div>
+        <span class="field-error" id="comidaFieldError"></span>
+      </div>
+
+      <div class="field">
+        <label for="postreField">Opción de postre</label>
+        <div class="select-wrapper">
+          <select id="postreField" required></select>
+          <i class="fa-solid fa-chevron-down select-arrow"></i>
+        </div>
+        <span class="field-error" id="postreFieldError"></span>
+      </div>
+
+      <p id="formGeneralError" class="form-general-error hidden"></p>
+
+      <button type="submit" id="confirmOrderBtn" class="btn btn-primary btn-large">
+        <span id="confirmOrderBtnLabel">Confirmar pedido</span>
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     PANTALLA 3: Agradecimiento / confirmación
+     ============================================================ -->
+<div id="screen-thanks" class="screen-overlay hidden">
+  <div class="card thanks-card">
+    <div class="thanks-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h1 id="thankYouTitle">¡Muchas gracias!</h1>
+    <p id="thankYouMessage">Tu pedido fue registrado correctamente.</p>
+    <p class="countdown-text">
+      <a href="#" id="backLink">Volver atrás</a> en <span id="countdownNumber">10</span>...
+    </p>
+  </div>
+</div>
+
+<!-- Notificación tipo toast para mensajes de error elegantes -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="config.js"></script>
+<script src="google.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
