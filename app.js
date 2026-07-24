@@ -157,9 +157,37 @@
     state.selectedOperation = operation;
     localStorage.setItem(CONFIG.storageKeys.lastOperation, opId);
 
+    // ---- Caso especial: operación con link externo (ej. Quorum) ----
+    // No se muestra el menú en la web: se redirige directo al link
+    // donde el colaborador hace su pedido.
+    if (operation.mode === "external") {
+      if (!operation.externalUrl) {
+        showToast("Falta configurar el link externo de esta operación.", "toast-error");
+        return;
+      }
+      window.location.href = operation.externalUrl;
+      return;
+    }
+
     els.operationName.textContent = operation.name;
+    configureRequestButton(operation);
     showScreen("menu");
     loadMenu(operation);
+  }
+
+  /* Configura el botón inferior de la pantalla de menú según el
+     modo de la operación: pedir por formulario, o solo volver
+     (operaciones donde el pedido es presencial, ej. Ferreyra). */
+  function configureRequestButton(operation) {
+    const icon = document.getElementById("requestMenuBtnIcon");
+
+    if (operation.mode === "none") {
+      icon.className = "fa-solid fa-arrow-left";
+      document.getElementById("requestMenuBtnLabel").textContent = CONFIG.text.backBtn;
+    } else {
+      icon.className = "fa-solid fa-clipboard-list";
+      document.getElementById("requestMenuBtnLabel").textContent = CONFIG.text.requestMenuBtn;
+    }
   }
 
   function showScreen(name) {
@@ -240,9 +268,10 @@
     const operation = state.selectedOperation;
     if (!operation) return;
 
-    if (operation.mode === "external") {
-      // ---- Caso: la operación utiliza un enlace externo ----
-      window.open(operation.externalUrl, "_blank", "noopener");
+    if (operation.mode === "none") {
+      // ---- Caso: operación sin pedido por la web (ej. Ferreyra) ----
+      // El botón funciona como "Volver".
+      showScreen("select");
       return;
     }
 
@@ -273,7 +302,7 @@
       .join("");
 
     fillOptionsForSelectedDay();
-    els.dayField.addEventListener("change", fillOptionsForSelectedDay);
+    els.dayField.onchange = fillOptionsForSelectedDay;
   }
 
   function fillOptionsForSelectedDay() {
