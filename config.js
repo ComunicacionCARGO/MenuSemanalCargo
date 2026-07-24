@@ -15,13 +15,17 @@ const CONFIG = {
      va a mostrar datos de ejemplo (modo demo) para que puedas
      probar el diseño sin tener el backend listo todavía.
      -------------------------------------------------------- */
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwFVbo_P_uye9hIpc2PQqmJOTqM-xpemxaYcjc9CCfnBK9W00ZwRnLvzYj0nA3RNGGZDg/exec", // ej: "https://script.google.com/macros/s/AKfycb.../exec"
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwFVbo_P_uye9hIpc2PQqmJOTqM-xpemxaYcjc9CCfnBK9W00ZwRnLvzYj0nA3RNGGZDg/exec",
 
   /* --------------------------------------------------------
      Operaciones disponibles y su configuración individual.
      Cada operación puede:
        - usar formulario propio (mode: "form")
        - redirigir a un link externo (mode: "external")
+       - no ofrecer pedido por la web (mode: "none"): se ve el
+         menú pero en vez de "Solicitar menú" aparece "Volver".
+         Útil para operaciones donde el pedido se hace de forma
+         presencial (ej. en el comedor).
 
      Para cambiar cómo pide el menú una operación, tocá
      únicamente el campo "mode" y, si corresponde, "externalUrl".
@@ -30,13 +34,16 @@ const CONFIG = {
     {
       id: "cmq-cba",
       name: "CMQ Cba",
-      mode: "form", // "form" | "external"
+      mode: "form", // "form" | "external" | "none"
       externalUrl: "" // solo se usa si mode === "external"
     },
     {
       id: "ferreyra",
       name: "Ferreyra",
-      mode: "form",
+
+      // ---- CASO ESPECIAL: en Ferreyra los pedidos se hacen ----
+      // ---- presencialmente en el comedor, no por la web    ----
+      mode: "none",
       externalUrl: ""
     },
     {
@@ -62,7 +69,7 @@ const CONFIG = {
       // Si la operación utiliza un enlace externo:
       // mode: "external"  +  completar externalUrl
       mode: "external",
-      externalUrl: "https://forms.gle/REEMPLAZAR-CON-EL-LINK-DE-QUORUM"
+      externalUrl: "https://flykitchen.com.ar/accesoclientes"
     }
   ],
 
@@ -75,6 +82,7 @@ const CONFIG = {
     selectPrompt: "Elegí tu operación",
     continueBtn: "Continuar",
     requestMenuBtn: "Solicitar menú",
+    backBtn: "Volver",
     confirmOrderBtn: "Confirmar pedido",
     thankYouTitle: "¡Muchas gracias!",
     thankYouMessage: "Tu pedido fue registrado correctamente.",
