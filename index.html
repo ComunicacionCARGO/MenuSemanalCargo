@@ -8,7 +8,7 @@
 <!-- Tipografía Montserrat -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Stardos+Stencil:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
 <!-- Iconos -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -58,14 +58,13 @@
        PANTALLA 2: Menú semanal
        ============================================================ -->
   <section id="screen-menu" class="screen">
+    <button id="backToSelect" class="icon-btn corner-btn corner-btn-left" aria-label="Volver a elegir operación" title="Cambiar operación">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
     <div class="menu-header">
-      <button id="backToSelect" class="icon-btn" aria-label="Volver a elegir operación" title="Cambiar operación">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
-      <div class="menu-header-text">
-        <h1 id="operationName">Operación</h1>
-        <p id="menuDateRange" class="muted"></p>
-      </div>
+      <h1 id="operationName">Operación</h1>
+      <p id="menuDateRange" class="muted"></p>
     </div>
 
     <p id="lastUpdated" class="last-updated muted"></p>
