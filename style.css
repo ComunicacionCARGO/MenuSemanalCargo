@@ -118,7 +118,7 @@ input:focus-visible {
 .screen:not(.active) { display: none; }
 
 /* Pantalla 1 centrada verticalmente */
-#screen-select {
+#screen-select.active {
   min-height: calc(100vh - 170px);
   display: flex;
   align-items: center;
@@ -151,8 +151,8 @@ input:focus-visible {
 
 .brand-icon {
   font-size: 28px;
-  color: var(--primary);
-  background: var(--primary-light);
+  color: #FFFFFF;
+  background: var(--primary);
   width: 60px;
   height: 60px;
   display: flex;
