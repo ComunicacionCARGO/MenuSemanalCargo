@@ -442,12 +442,19 @@ input[type="text"]:focus {
 .btn-floating {
   position: fixed;
   bottom: 20px;
-  left: 16px;
-  right: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
   max-width: 688px;
-  margin: 0 auto;
   z-index: 40;
 }
+
+/* .btn-primary define su propio "transform" en :hover/:active para el
+   efecto de levantarse. Como .btn-floating también usa "transform"
+   para centrarse (translateX), hay que combinar los dos acá, si no
+   el botón flotante se corre del centro al tocarlo en mobile. */
+.btn-floating:hover:not(:disabled) { transform: translateX(-50%) translateY(-1px); }
+.btn-floating:active:not(:disabled) { transform: translateX(-50%); }
 
 /* ================= Estados: carga y error ================= */
 .loading-state, .error-state {
