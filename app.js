@@ -224,7 +224,8 @@
 
     if (data.lastUpdated) {
       const d = new Date(data.lastUpdated);
-      els.lastUpdated.textContent = `Última actualización: ${d.toLocaleDateString("es-AR")} ${d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}`;
+      const formatted = `${d.toLocaleDateString("es-AR")} ${d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}`;
+      els.lastUpdated.innerHTML = `<span class="status-dot"></span> Última actualización: ${formatted}`;
     }
 
     if (!data.days || !data.days.length) {

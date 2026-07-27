@@ -1,56 +1,63 @@
 /* ============================================================
    style.css
-   Diseño moderno, corporativo y minimalista.
-   Todos los colores están centralizados en :root para poder
-   personalizar la identidad visual desde un único lugar.
+   Identidad visual Grupo Cargo: tipografía stencil para
+   titulares, Montserrat para el cuerpo, paleta de marca y
+   componentes utilitarios (tarjetas planas, iconos simples,
+   botones tipo "chevron"). Todos los colores están
+   centralizados acá abajo.
    ============================================================ */
 
 :root {
-  --primary: #6C5CE7;        /* Color principal: botones, acentos, selects activos */
-  --primary-dark: #5847d1;   /* Hover/estado activo del color principal */
-  --primary-light: #EDEBFD;  /* Fondos suaves relacionados al primario (chips, hover de tarjetas) */
-  --secondary: #FF8A3D;      /* Color secundario: detalles, etiqueta "Menú", iconos destacados */
-  --background: #F4F5FA;     /* Fondo general de la app */
-  --text: #1F2430;           /* Color de texto principal */
-  --text-muted: #6B7280;     /* Texto secundario: fechas, ayudas, subtítulos */
-  --success: #22C55E;        /* Confirmaciones, pantalla de agradecimiento */
-  --danger: #EF4444;         /* Errores de validación, pedidos duplicados */
-  --card: #FFFFFF;           /* Fondo de tarjetas y modales */
+  --primary: #759AAB;        /* Color de marca principal: acentos, selects activos, iconos */
+  --primary-dark: #5F8194;   /* Hover/estado activo del color principal */
+  --primary-light: #E4ECEF;  /* Fondos suaves relacionados al primario (chips, franjas) */
+  --accent: #EF4529;         /* Rojo de marca: botones principales (CTA), foco de atención */
+  --accent-dark: #D23A1F;    /* Hover del rojo de marca */
+  --success: #4C956C;        /* Confirmaciones, estados "ok", pantalla de agradecimiento */
+  --danger: #EF4529;         /* Errores de validación, pedidos duplicados (mismo rojo de marca) */
+  --background: #FFFBF3;     /* Fondo general de la app (crema Cargo) */
+  --text: #393939;           /* Color de texto principal (gris oscuro Cargo) */
+  --text-muted: #7A7A7A;     /* Texto secundario: fechas, ayudas, subtítulos */
+  --card: #FFFFFF;           /* Fondo de tarjetas, inputs y del logo (siempre sobre blanco) */
   --button-text: #FFFFFF;    /* Color de texto sobre botones de color */
-  --border: #E5E7EB;         /* Bordes sutiles de inputs y tarjetas */
+  --border: #EAE3D3;         /* Bordes sutiles sobre el fondo crema */
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 4px 20px rgba(31, 36, 48, 0.06);
-  --shadow-card: 0 10px 30px rgba(31, 36, 48, 0.08);
-  --shadow-modal: 0 20px 60px rgba(31, 36, 48, 0.25);
+  --shadow-soft: 0 3px 14px rgba(57, 57, 57, 0.08);
+  --shadow-card: 0 10px 28px rgba(57, 57, 57, 0.10);
+  --shadow-modal: 0 20px 50px rgba(57, 57, 57, 0.28);
 
-  --font-main: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Stardos Stencil", "Montserrat", sans-serif; /* Titulares, marca */
+  --font-main: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; /* Cuerpo */
 
   color-scheme: light;
 }
 
-/* -------- Modo oscuro: mismas variables, otros valores -------- */
+/* -------- Modo oscuro: mismas variables, otros valores --------
+   El logo SIEMPRE se muestra sobre una placa blanca fija, sin
+   importar el tema, por eso --card no cambia para .logo-plate. */
 [data-theme="dark"] {
-  --primary: #8B7CF6;
-  --primary-dark: #A296F8;
-  --primary-light: #2A2650;
-  --secondary: #FFA35C;
-  --background: #14151F;
-  --text: #F1F2F6;
-  --text-muted: #9AA0AC;
-  --success: #34D399;
-  --danger: #F87171;
-  --card: #1E2030;
+  --primary: #8FB0BE;
+  --primary-dark: #A9C3CD;
+  --primary-light: #2B3B42;
+  --accent: #FF6A4D;
+  --accent-dark: #FF8266;
+  --success: #6CBF93;
+  --danger: #FF6A4D;
+  --background: #232323;
+  --text: #F4F1E9;
+  --text-muted: #B3AFA4;
+  --card: #2E2E2E;
   --button-text: #FFFFFF;
-  --border: #2E3142;
+  --border: #3D3D3D;
 
-  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.35);
-  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 3px 14px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.6);
 
   color-scheme: dark;
 }
@@ -104,7 +111,7 @@ input:focus-visible {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 24px 16px 80px;
+  padding: 24px 16px 90px;
 }
 
 .screen { width: 100%; max-width: 720px; }
@@ -121,9 +128,10 @@ input:focus-visible {
 /* ================= Tarjetas ================= */
 .card {
   background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 40px 32px;
+  padding: 36px 30px;
   animation: fadeSlideUp 0.4s ease;
 }
 
@@ -138,32 +146,34 @@ input:focus-visible {
   text-align: center;
 }
 
-.brand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
+/* -------- Placa del logo: SIEMPRE blanca, en cualquier tema -------- */
+.brand { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 6px; }
+
+.logo-plate {
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  padding: 18px 28px;
+  box-shadow: var(--shadow-soft);
+  display: inline-flex;
 }
 
-.brand-icon {
-  font-size: 30px;
-  color: var(--primary);
-  background: var(--primary-light);
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-pill);
+.logo-plate img {
+  height: 56px;
+  width: auto;
+  display: block;
 }
 
-.select-card h1 { font-size: 24px; }
+.select-card .app-subtitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: var(--text);
+}
 
 .subtitle {
   color: var(--text-muted);
-  margin: 8px 0 28px;
-  font-size: 15px;
+  margin: 8px 0 26px;
+  font-size: 14.5px;
 }
 
 /* ================= Campos de formulario ================= */
@@ -184,32 +194,35 @@ select,
 input[type="text"] {
   width: 100%;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 500;
   color: var(--text);
-  background: var(--background);
-  border: 1.5px solid var(--border);
+  background: var(--card);
+  border: none;
   border-radius: var(--radius-sm);
-  padding: 13px 16px;
+  padding: 15px 18px;
   appearance: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 0.2s ease;
+  min-height: 52px;
 }
 
-select { padding-right: 42px; cursor: pointer; }
+select::placeholder, input::placeholder { color: #B9B2A2; }
+
+select { padding-right: 44px; cursor: pointer; }
 
 select:focus,
 input[type="text"]:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--primary-light);
+  box-shadow: 0 0 0 3px var(--primary-light), var(--shadow-soft);
   outline: none;
 }
 
 .select-arrow {
   position: absolute;
-  right: 16px;
+  right: 18px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-muted);
+  color: var(--primary);
   pointer-events: none;
   font-size: 13px;
 }
@@ -219,17 +232,17 @@ input[type="text"]:focus {
   min-height: 16px;
   color: var(--danger);
   font-size: 12.5px;
-  margin-top: 5px;
-  font-weight: 500;
+  margin-top: 6px;
+  font-weight: 600;
 }
 
 .form-general-error {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 69, 41, 0.1);
   color: var(--danger);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
   font-size: 13.5px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 16px;
 }
 
@@ -240,7 +253,8 @@ input[type="text"]:focus {
   font-weight: 700;
   font-size: 15px;
   letter-spacing: 0.2px;
-  padding: 15px 24px;
+  padding: 16px 26px;
+  min-height: 52px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -251,37 +265,39 @@ input[type="text"]:focus {
 .btn-large { width: 100%; }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--accent);
   color: var(--button-text);
-  box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+  box-shadow: 0 8px 18px rgba(239, 69, 41, 0.28);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: var(--accent-dark);
   transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) { transform: translateY(0); }
 
 .btn-primary:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
   box-shadow: none;
 }
 
 .btn-secondary {
-  background: var(--primary-light);
-  color: var(--primary);
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  box-shadow: none;
 }
 
-.btn-secondary:hover { background: var(--border); }
+.btn-secondary:hover { background: rgba(239, 69, 41, 0.06); }
 
 .icon-btn {
   background: var(--card);
-  border: 1.5px solid var(--border);
+  border: none;
   color: var(--text);
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
@@ -289,6 +305,7 @@ input[type="text"]:focus {
   font-size: 15px;
   box-shadow: var(--shadow-soft);
   transition: background 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
 }
 
 .icon-btn:hover { transform: translateY(-1px); }
@@ -298,6 +315,7 @@ input[type="text"]:focus {
   top: 20px;
   right: 20px;
   z-index: 50;
+  color: var(--primary);
 }
 
 /* ================= Pantalla de menú ================= */
@@ -306,25 +324,45 @@ input[type="text"]:focus {
   align-items: center;
   gap: 14px;
   margin-bottom: 4px;
+  flex-wrap: wrap;
 }
 
-.menu-header-text h1 { font-size: 22px; }
+.menu-header-text h1 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  letter-spacing: 0.3px;
+  color: var(--text);
+}
+
 .muted { color: var(--text-muted); font-size: 13.5px; }
 
 .last-updated {
-  margin: 6px 0 20px 56px;
+  margin: 8px 0 20px 58px;
   font-size: 12.5px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  background: var(--success);
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .menu-days {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 100px;
+  margin-bottom: 110px;
 }
 
 .day-card {
   background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-soft);
   padding: 20px 22px;
@@ -338,12 +376,13 @@ input[type="text"]:focus {
   margin-bottom: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
 }
 
 .day-card-header .day-label {
+  font-family: var(--font-display);
   font-size: 16px;
-  font-weight: 700;
-  color: var(--secondary);
+  color: var(--primary);
 }
 
 .day-card-header .day-date {
@@ -351,12 +390,12 @@ input[type="text"]:focus {
   color: var(--text-muted);
 }
 
-.day-options { display: flex; flex-direction: column; gap: 8px; }
+.day-options { display: flex; flex-direction: column; gap: 9px; }
 
 .day-option {
   font-size: 14px;
   line-height: 1.5;
-  padding-left: 22px;
+  padding-left: 24px;
   position: relative;
 }
 
@@ -367,8 +406,8 @@ input[type="text"]:focus {
   position: absolute;
   left: 0;
   top: 2px;
-  font-size: 11px;
-  color: var(--primary);
+  font-size: 12px;
+  color: var(--accent);
 }
 
 .btn-floating {
@@ -409,7 +448,7 @@ input[type="text"]:focus {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(20, 21, 31, 0.55);
+  background: rgba(57, 57, 57, 0.55);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -420,13 +459,13 @@ input[type="text"]:focus {
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .modal-card {
-  background: var(--card);
+  background: var(--background);
   width: 100%;
   max-width: 520px;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  padding: 30px 28px 34px;
+  padding: 30px 24px 34px;
   position: relative;
   animation: slideUpModal 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -437,12 +476,14 @@ input[type="text"]:focus {
 }
 
 .modal-card h2 {
-  font-size: 19px;
+  font-family: var(--font-display);
+  font-size: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 22px;
   color: var(--primary);
+  padding-right: 40px;
 }
 
 .modal-close {
@@ -474,7 +515,7 @@ input[type="text"]:focus {
 }
 
 .thanks-icon {
-  font-size: 56px;
+  font-size: 54px;
   color: var(--success);
   margin-bottom: 18px;
   animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -485,7 +526,12 @@ input[type="text"]:focus {
   to { transform: scale(1); opacity: 1; }
 }
 
-.thanks-card h1 { font-size: 22px; margin-bottom: 10px; }
+.thanks-card h1 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
 .thanks-card p#thankYouMessage { color: var(--text-muted); margin-bottom: 22px; }
 
 .countdown-text {
@@ -524,12 +570,34 @@ input[type="text"]:focus {
 .toast.toast-success { background: var(--success); }
 
 /* ================= Responsive ================= */
+/* Pantallas grandes: dos columnas de días, botón flotante angosto */
 @media (min-width: 900px) {
   .menu-days { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .btn-floating { max-width: 400px; }
 }
 
+/* Mobile: nada de filas apretadas. Todo se acomoda en columna,
+   con más aire y objetivos táctiles más grandes. */
+@media (max-width: 480px) {
+  #app { padding: 18px 14px 96px; }
+  .card { padding: 28px 20px; }
+  .logo-plate { padding: 14px 20px; }
+  .logo-plate img { height: 44px; }
+  .modal-card { padding: 26px 18px 30px; }
+
+  .menu-header { gap: 12px; }
+  .menu-header-text h1 { font-size: 18px; }
+  .last-updated { margin-left: 0; }
+
+  .day-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .btn { font-size: 14.5px; padding: 15px 20px; }
+}
+
 @media (max-width: 380px) {
-  .card { padding: 30px 22px; }
-  .modal-card { padding: 26px 20px 30px; }
+  .select-card .app-subtitle { font-size: 17px; }
 }

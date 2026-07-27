@@ -8,7 +8,7 @@
 <!-- Tipografía Montserrat -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Stardos+Stencil:wght@400;700&display=swap" rel="stylesheet" />
 
 <!-- Iconos -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -30,8 +30,10 @@
   <section id="screen-select" class="screen active">
     <div class="card select-card">
       <div class="brand">
-        <i class="fa-solid fa-utensils brand-icon"></i>
-        <h1 id="appTitle">Menú semanal</h1>
+        <div class="logo-plate">
+          <img src="assets/logo-cargo.png" alt="Cargo" />
+        </div>
+        <p class="app-subtitle" id="appTitle">Menú semanal</p>
       </div>
       <p class="subtitle" id="selectPrompt">Elegí tu operación</p>
 
@@ -47,7 +49,7 @@
 
       <button id="continueBtn" class="btn btn-primary btn-large" disabled>
         <span id="continueBtnLabel">Continuar</span>
-        <i class="fa-solid fa-arrow-right"></i>
+        <i class="fa-solid fa-chevron-right"></i>
       </button>
     </div>
   </section>
