@@ -586,10 +586,10 @@ input[type="text"]:focus {
 
 /* ================= Responsive ================= */
 /* Pantallas grandes: dos columnas de días, botón flotante angosto */
-@media (min-width: 900px) {
-  .menu-days { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .btn-floating { max-width: 400px; }
-}
+/* Los días del menú siempre van en una sola columna centrada
+   (dentro del ancho máximo de .screen), sin importar el tamaño
+   de pantalla — evita que las tarjetas queden apretadas una al
+   lado de la otra. */
 
 /* Mobile: nada de filas apretadas. Todo se acomoda en columna,
    con más aire y objetivos táctiles más grandes. */
