@@ -57,11 +57,11 @@
     if (!container) return;
 
     const isMobile = window.innerWidth < 640;
-    const count = isMobile ? 7 : 12;
+    const count = isMobile ? 12 : 20;
 
     for (let i = 0; i < count; i++) {
       const icon = ICONS[Math.floor(Math.random() * ICONS.length)];
-      const size = isMobile ? rand(16, 26) : rand(20, 36);
+      const size = isMobile ? rand(24, 36) : rand(30, 52);
 
       const outer = document.createElement("div");
       outer.className = "doodle";
