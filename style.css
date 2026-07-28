@@ -21,6 +21,7 @@
   --card: #FFFFFF;           /* Fondo de tarjetas, inputs y del logo (siempre sobre blanco) */
   --button-text: #FFFFFF;    /* Color de texto sobre botones de color */
   --border: #EAE3D3;         /* Bordes sutiles sobre el fondo crema */
+  --doodle-color: rgba(57, 57, 57, 0.11); /* Color de los dibujos flotantes de fondo */
 
   --radius-sm: 12px;
   --radius-md: 18px;
@@ -54,6 +55,7 @@
   --card: #2E2E2E;
   --button-text: #FFFFFF;
   --border: #3D3D3D;
+  --doodle-color: rgba(244, 241, 233, 0.08);
 
   --shadow-soft: 0 3px 14px rgba(0, 0, 0, 0.35);
   --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.45);
@@ -112,6 +114,8 @@ input:focus-visible {
   align-items: flex-start;
   justify-content: center;
   padding: 80px 16px 90px;
+  position: relative;
+  z-index: 1;
 }
 
 .screen { width: 100%; max-width: 720px; }
@@ -640,4 +644,40 @@ input[type="text"]:focus {
 
 @media (max-width: 380px) {
   .select-card .app-subtitle { font-size: 17px; }
+}
+
+/* ================= Fondo con dibujos flotantes ================= */
+/* Capa fija detrás de todo el contenido (ver #app z-index: 1 más
+   arriba). Los dibujos individuales los genera doodles.js. */
+.bg-doodles {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.doodle {
+  position: absolute;
+  color: var(--doodle-color);
+  transition: transform 0.05s linear;
+  will-change: transform;
+}
+
+/* La animación de flotado va en un div interno separado del que
+   usa doodles.js para el efecto de "alejarse del cursor": así los
+   dos "transform" (flotado + repulsión) no se pisan entre sí. */
+.doodle-float {
+  animation: doodleFloat var(--duration, 10s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  transform: rotate(var(--rot, 0deg));
+}
+
+@keyframes doodleFloat {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-14px) rotate(calc(var(--rot, 0deg) * -1)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doodle-float { animation: none; }
 }
