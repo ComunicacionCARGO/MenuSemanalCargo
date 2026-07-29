@@ -29,11 +29,6 @@ const CONFIG = {
 
      Para cambiar cómo pide el menú una operación, tocá
      únicamente el campo "mode" y, si corresponde, "externalUrl".
-
-     Además, cualquier operación puede sumar un campo extra al
-     formulario con "extraField" (opcional). Se muestra solo para
-     esa operación, como un desplegable más, y se guarda en la
-     columna "Campo extra" de la pestaña Pedidos.
      -------------------------------------------------------- */
   operations: [
     {
@@ -63,11 +58,11 @@ const CONFIG = {
       mode: "form",
       externalUrl: "",
 
-      // ---- CASO ESPECIAL: en Pertrak se pregunta dónde come ----
-      extraField: {
-        label: "¿Dónde comés?",
-        options: ["Depósito", "Comedor"]
-      }
+      // ---- CASO ESPECIAL: en Pertrak hay que elegir además ----
+      // ---- dónde se va a comer (depósito o comedor).       ----
+      // Si una operación no necesita este campo, simplemente
+      // no se declara "locationOptions" (o se deja vacío).
+      locationOptions: ["Depósito", "Comedor"]
     },
     {
       id: "quorum",
@@ -114,28 +109,5 @@ const CONFIG = {
   storageKeys: {
     lastOperation: "menuapp_last_operation",
     darkMode: "menuapp_dark_mode"
-  },
-
-  /* --------------------------------------------------------
-     Fondo decorativo: dibujos flotando detrás del contenido.
-
-     Para usar tus propios dibujos:
-       1. Subí tus archivos .svg a la carpeta assets/doodles/
-       2. Escribí cada nombre de archivo en "files" (abajo)
-       3. Ajustá tamaño/cantidad/opacidad como quieras, sin
-          tocar ningún otro archivo.
-
-     Si "files" queda vacío, no se muestra ningún dibujo.
-     -------------------------------------------------------- */
-  doodleBackground: {
-    folder: "assets/doodles/",
-    files: [
-      // Ejemplo: "queso.svg", "tomate.svg", "hoja.svg"
-    ],
-    sizeMin: 30,        // px — tamaño mínimo de cada dibujo
-    sizeMax: 52,        // px — tamaño máximo de cada dibujo
-    countDesktop: 20,   // cantidad de dibujos en pantallas grandes
-    countMobile: 12,    // cantidad de dibujos en celulares
-    opacity: 0.35       // 0 (invisible) a 1 (opaco)
   }
 };

@@ -31,13 +31,12 @@
     closeModal: document.getElementById("closeModal"),
     orderForm: document.getElementById("orderForm"),
     dayField: document.getElementById("dayField"),
+    lugarFieldWrapper: document.getElementById("lugarFieldWrapper"),
+    lugarField: document.getElementById("lugarField"),
     nameField: document.getElementById("nameField"),
     legajoField: document.getElementById("legajoField"),
     comidaField: document.getElementById("comidaField"),
     postreField: document.getElementById("postreField"),
-    extraFieldWrapper: document.getElementById("extraFieldWrapper"),
-    extraFieldLabel: document.getElementById("extraFieldLabel"),
-    extraField: document.getElementById("extraField"),
     formGeneralError: document.getElementById("formGeneralError"),
     confirmOrderBtn: document.getElementById("confirmOrderBtn"),
 
@@ -144,7 +143,7 @@
     [els.nameField, els.legajoField].forEach((field) => {
       field.addEventListener("input", () => clearFieldError(field));
     });
-    [els.dayField, els.comidaField, els.postreField].forEach((field) => {
+    [els.dayField, els.comidaField, els.postreField, els.lugarField].forEach((field) => {
       field.addEventListener("change", () => clearFieldError(field));
     });
   }
@@ -285,7 +284,6 @@
 
   function openModal() {
     populateFormSelects();
-    configureExtraField();
     els.orderForm.reset();
     clearAllFieldErrors();
     els.formGeneralError.classList.add("hidden");
@@ -295,26 +293,6 @@
 
   function closeModal() {
     els.orderModal.classList.add("hidden");
-  }
-
-  /* Muestra el campo extra (ej. "¿Dónde comés?" en Pertrak) solo si
-     la operación seleccionada lo tiene configurado en config.js. */
-  function configureExtraField() {
-    const extra = state.selectedOperation && state.selectedOperation.extraField;
-
-    if (!extra) {
-      els.extraFieldWrapper.classList.add("hidden");
-      els.extraField.required = false;
-      els.extraField.innerHTML = "";
-      return;
-    }
-
-    els.extraFieldLabel.textContent = extra.label;
-    els.extraField.innerHTML = extra.options
-      .map((opt) => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`)
-      .join("");
-    els.extraField.required = true;
-    els.extraFieldWrapper.classList.remove("hidden");
   }
 
   function populateFormSelects() {
@@ -328,6 +306,29 @@
 
     fillOptionsForSelectedDay();
     els.dayField.onchange = fillOptionsForSelectedDay;
+
+    populateLocationField();
+  }
+
+  /* Campo "Lugar" (depósito / comedor): solo se muestra en las
+     operaciones que lo necesitan, definidas por "locationOptions"
+     en config.js (por ahora, Pertrak). Si la operación no lo
+     define, el campo queda oculto y no se pide ni se valida. */
+  function populateLocationField() {
+    const options = state.selectedOperation.locationOptions;
+
+    if (!options || !options.length) {
+      els.lugarFieldWrapper.classList.add("hidden");
+      els.lugarField.required = false;
+      els.lugarField.innerHTML = "";
+      return;
+    }
+
+    els.lugarFieldWrapper.classList.remove("hidden");
+    els.lugarField.required = true;
+    els.lugarField.innerHTML = options
+      .map((opt) => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`)
+      .join("");
   }
 
   function fillOptionsForSelectedDay() {
@@ -387,8 +388,10 @@
       valid = false;
     }
 
-    if (els.extraField.required && !els.extraField.value) {
-      setFieldError(els.extraField, "extraFieldError", "Seleccioná una opción.");
+    // El campo "lugar" solo existe (y por lo tanto solo se valida)
+    // en las operaciones que lo definen en config.js (ej. Pertrak)
+    if (!els.lugarFieldWrapper.classList.contains("hidden") && !els.lugarField.value) {
+      setFieldError(els.lugarField, "lugarFieldError", "Seleccioná dónde vas a comer.");
       valid = false;
     }
 
@@ -408,7 +411,7 @@
   }
 
   function clearAllFieldErrors() {
-    [els.dayField, els.nameField, els.legajoField, els.comidaField, els.postreField, els.extraField].forEach(clearFieldError);
+    [els.dayField, els.lugarField, els.nameField, els.legajoField, els.comidaField, els.postreField].forEach(clearFieldError);
   }
 
   async function submitOrder() {
@@ -422,7 +425,10 @@
       legajo: els.legajoField.value.trim(),
       comida: els.comidaField.value,
       postre: els.postreField.value,
-      extra: els.extraField.required ? els.extraField.value : ""
+      // Vacío ("") en operaciones que no usan este campo, para que
+      // la columna "Lugar" en la planilla quede en blanco sin romper
+      // el orden de columnas.
+      lugar: els.lugarFieldWrapper.classList.contains("hidden") ? "" : els.lugarField.value
     };
 
     els.confirmOrderBtn.disabled = true;

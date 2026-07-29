@@ -112,6 +112,17 @@
         <span class="field-error" id="dayFieldError"></span>
       </div>
 
+      <!-- Solo se muestra en operaciones con "locationOptions"
+           definido en config.js (por ahora, Pertrak) -->
+      <div class="field hidden" id="lugarFieldWrapper">
+        <label for="lugarField">Lugar donde vas a comer</label>
+        <div class="select-wrapper">
+          <select id="lugarField"></select>
+          <i class="fa-solid fa-chevron-down select-arrow"></i>
+        </div>
+        <span class="field-error" id="lugarFieldError"></span>
+      </div>
+
       <div class="field">
         <label for="nameField">Nombre y apellido</label>
         <input type="text" id="nameField" placeholder="Ej: Juan Pérez" required autocomplete="name" />
