@@ -35,6 +35,9 @@
     legajoField: document.getElementById("legajoField"),
     comidaField: document.getElementById("comidaField"),
     postreField: document.getElementById("postreField"),
+    extraFieldWrapper: document.getElementById("extraFieldWrapper"),
+    extraFieldLabel: document.getElementById("extraFieldLabel"),
+    extraField: document.getElementById("extraField"),
     formGeneralError: document.getElementById("formGeneralError"),
     confirmOrderBtn: document.getElementById("confirmOrderBtn"),
 
@@ -282,6 +285,7 @@
 
   function openModal() {
     populateFormSelects();
+    configureExtraField();
     els.orderForm.reset();
     clearAllFieldErrors();
     els.formGeneralError.classList.add("hidden");
@@ -291,6 +295,26 @@
 
   function closeModal() {
     els.orderModal.classList.add("hidden");
+  }
+
+  /* Muestra el campo extra (ej. "¿Dónde comés?" en Pertrak) solo si
+     la operación seleccionada lo tiene configurado en config.js. */
+  function configureExtraField() {
+    const extra = state.selectedOperation && state.selectedOperation.extraField;
+
+    if (!extra) {
+      els.extraFieldWrapper.classList.add("hidden");
+      els.extraField.required = false;
+      els.extraField.innerHTML = "";
+      return;
+    }
+
+    els.extraFieldLabel.textContent = extra.label;
+    els.extraField.innerHTML = extra.options
+      .map((opt) => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`)
+      .join("");
+    els.extraField.required = true;
+    els.extraFieldWrapper.classList.remove("hidden");
   }
 
   function populateFormSelects() {
@@ -363,6 +387,11 @@
       valid = false;
     }
 
+    if (els.extraField.required && !els.extraField.value) {
+      setFieldError(els.extraField, "extraFieldError", "Seleccioná una opción.");
+      valid = false;
+    }
+
     return valid;
   }
 
@@ -379,7 +408,7 @@
   }
 
   function clearAllFieldErrors() {
-    [els.dayField, els.nameField, els.legajoField, els.comidaField, els.postreField].forEach(clearFieldError);
+    [els.dayField, els.nameField, els.legajoField, els.comidaField, els.postreField, els.extraField].forEach(clearFieldError);
   }
 
   async function submitOrder() {
@@ -392,7 +421,8 @@
       name: els.nameField.value.trim(),
       legajo: els.legajoField.value.trim(),
       comida: els.comidaField.value,
-      postre: els.postreField.value
+      postre: els.postreField.value,
+      extra: els.extraField.required ? els.extraField.value : ""
     };
 
     els.confirmOrderBtn.disabled = true;
