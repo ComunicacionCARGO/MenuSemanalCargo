@@ -60,7 +60,7 @@
 
     for (let i = 0; i < count; i++) {
       const file = ICON_FILES[Math.floor(Math.random() * ICON_FILES.length)];
-      const size = isMobile ? rand(50, 70) : rand(80, 100);
+      const size = isMobile ? rand(80, 100) : rand(150, 170);
 
       const outer = document.createElement("div");
       outer.className = "doodle";
