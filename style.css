@@ -659,9 +659,25 @@ input[type="text"]:focus {
 
 .doodle {
   position: absolute;
-  color: var(--doodle-color);
   transition: transform 0.05s linear;
   will-change: transform;
+}
+
+/* El archivo SVG (subido por vos en assets/doodles/) se usa acá
+   como máscara: solo importa su silueta (forma + transparencia),
+   no su color. El color visible siempre es var(--doodle-color),
+   la misma variable de siempre, así que se ve igual en modo claro
+   y oscuro que antes, sin importar cómo esté coloreado el SVG. */
+.doodle-icon {
+  width: 100%;
+  height: 100%;
+  background-color: var(--doodle-color);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 /* La animación de flotado va en un div interno separado del que

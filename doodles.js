@@ -13,29 +13,28 @@
 (() => {
   "use strict";
 
-  /* Cada ícono es un trazo simple, estilo línea fina, coherente
-     con el ícono de cubiertos del resto de la app. */
-  const ICONS = [
-    // Queso
-    `<path d="M6 38 L24 10 L42 38 Z"/><circle cx="22" cy="28" r="2"/><circle cx="30" cy="32" r="1.6"/>`,
-    // Tomate
-    `<circle cx="24" cy="26" r="14"/><path d="M24 12 q-3 -6 -8 -4"/><path d="M24 12 q3 -6 8 -4"/>`,
-    // Hoja
-    `<path d="M10 38 Q10 10 38 10 Q38 38 10 38 Z"/><path d="M12 36 Q24 24 36 12"/>`,
-    // Aceitunas
-    `<circle cx="16" cy="30" r="5"/><circle cx="28" cy="26" r="5"/><circle cx="24" cy="36" r="5"/><path d="M22 20 q2 -6 6 -8"/>`,
-    // Pan
-    `<rect x="8" y="18" width="32" height="18" rx="9"/><path d="M16 18 L20 10"/><path d="M24 18 L28 10"/><path d="M32 18 L36 10"/>`,
-    // Fideos (espiral)
-    `<path d="M24 24 m-2 0 a2 2 0 1 1 4 0 a6 6 0 1 1 -12 0 a10 10 0 1 1 20 0 a14 14 0 1 1 -28 0"/>`,
-    // Café
-    `<path d="M10 20 h20 v14 a10 10 0 0 1 -20 0 Z"/><path d="M30 22 q8 0 8 8 t-8 8"/><path d="M16 12 q2 -4 0 -6"/><path d="M22 12 q2 -4 0 -6"/>`,
-    // Manzana
-    `<path d="M24 14 C14 14 10 24 12 32 C14 40 20 40 24 38 C28 40 34 40 36 32 C38 24 34 14 24 14 Z"/><path d="M24 14 v-4"/><path d="M24 10 q4 -2 6 1"/>`,
-    // Zanahoria
-    `<path d="M20 10 L28 10 L24 40 Z"/><path d="M22 10 q-4 -6 -8 -4"/><path d="M26 10 q4 -6 8 -4"/><path d="M24 10 v-6"/>`,
-    // Naranja
-    `<circle cx="24" cy="24" r="16"/><path d="M24 8 v32 M8 24 h32 M13 13 l22 22 M35 13 l-22 22"/>`
+  /* Cada dibujo es un archivo .svg suelto en assets/doodles/.
+     Para cambiar el arte, subí tu propio SVG con EL MISMO NOMBRE
+     (ej. reemplazá doodle-01.svg) y listo, no hace falta tocar
+     este archivo. El color de cada dibujo lo pone el CSS
+     (var(--doodle-color) en style.css) usando el SVG como
+     máscara: no importa de qué color esté dibujado tu archivo,
+     en la página se va a ver siempre con el mismo color que hoy,
+     tanto en modo claro como oscuro.
+
+     Si querés agregar o sacar dibujos, agregá o quitá líneas de
+     esta lista (podés usar el nombre de archivo que quieras). */
+  const ICON_FILES = [
+    "assets/doodles/doodle-01.svg",
+    "assets/doodles/doodle-02.svg",
+    "assets/doodles/doodle-03.svg",
+    "assets/doodles/doodle-04.svg",
+    "assets/doodles/doodle-05.svg",
+    "assets/doodles/doodle-06.svg",
+    "assets/doodles/doodle-07.svg",
+    "assets/doodles/doodle-08.svg",
+    "assets/doodles/doodle-09.svg",
+    "assets/doodles/doodle-10.svg"
   ];
 
   const REPEL_RADIUS = 130;   // px: distancia desde la que un dibujo empieza a "sentir" el cursor
@@ -60,7 +59,7 @@
     const count = isMobile ? 12 : 20;
 
     for (let i = 0; i < count; i++) {
-      const icon = ICONS[Math.floor(Math.random() * ICONS.length)];
+      const file = ICON_FILES[Math.floor(Math.random() * ICON_FILES.length)];
       const size = isMobile ? rand(24, 36) : rand(30, 52);
 
       const outer = document.createElement("div");
@@ -75,8 +74,18 @@
         inner.style.setProperty("--delay", `${rand(-8, 0)}s`);
         inner.style.setProperty("--rot", `${rand(-12, 12)}deg`);
       }
-      inner.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>`;
 
+      // El SVG se usa como máscara (ver .doodle-icon en style.css):
+      // define únicamente la silueta, el color lo pone siempre
+      // var(--doodle-color), igual que antes.
+      const icon = document.createElement("div");
+      icon.className = "doodle-icon";
+      icon.style.width = `${size}px`;
+      icon.style.height = `${size}px`;
+      icon.style.webkitMaskImage = `url("${file}")`;
+      icon.style.maskImage = `url("${file}")`;
+
+      inner.appendChild(icon);
       outer.appendChild(inner);
       container.appendChild(outer);
       doodles.push({ el: outer, x: 0, y: 0, targetX: 0, targetY: 0 });
