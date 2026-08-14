@@ -92,8 +92,19 @@ const CONFIG = {
     confirmOrderBtn: "Confirmar pedido",
     thankYouTitle: "¡Muchas gracias!",
     thankYouMessage: "Tu pedido fue registrado correctamente.",
+    // Mensaje que se muestra en la pantalla de agradecimiento
+    // cuando el pedido confirmado es un "Nuevo pedido" duplicado
+    // (segundo pedido del mismo legajo para el mismo día).
+    thankYouMessageCharged: "Tu pedido fue registrado correctamente. Al ser un segundo pedido para el mismo día, se cobrará el 100% del valor.",
     backLinkText: "Volver atrás",
-    countdownSeconds: 10
+    countdownSeconds: 10,
+
+    // ---- Aviso de legajo duplicado (mismo legajo + mismo día) ----
+    duplicateTitle: "Ya existe un pedido con este legajo",
+    duplicateMessage: "Ya se registró un pedido con este legajo para el día seleccionado. Si confirmás un segundo pedido, se cobrará el 100% del valor al colaborador.",
+    duplicateCancelBtn: "Cancelar",
+    duplicateModifyBtn: "Modificar pedido",
+    duplicateNewBtn: "Nuevo pedido (100%)"
   },
 
   /* --------------------------------------------------------

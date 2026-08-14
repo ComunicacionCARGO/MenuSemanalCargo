@@ -537,6 +537,59 @@ input[type="text"]:focus {
   .modal-card { border-radius: var(--radius-lg); }
 }
 
+/* ================= Modal de legajo duplicado ================= */
+.duplicate-card {
+  text-align: center;
+  padding-top: 34px;
+  z-index: 110; /* siempre por encima del modal de formulario */
+}
+
+.duplicate-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(239, 69, 41, 0.12);
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.duplicate-card h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 12px;
+  padding-right: 0;
+  justify-content: center;
+}
+
+.duplicate-message {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 26px;
+}
+
+.duplicate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+  padding: 10px 26px;
+}
+
+.btn-text:hover { color: var(--text); }
+
+#duplicateModal.modal-overlay { z-index: 150; }
+
 /* ================= Pantalla de agradecimiento ================= */
 .screen-overlay {
   position: fixed;

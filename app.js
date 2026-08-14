@@ -40,6 +40,11 @@
     formGeneralError: document.getElementById("formGeneralError"),
     confirmOrderBtn: document.getElementById("confirmOrderBtn"),
 
+    duplicateModal: document.getElementById("duplicateModal"),
+    duplicateCancelBtn: document.getElementById("duplicateCancelBtn"),
+    duplicateModifyBtn: document.getElementById("duplicateModifyBtn"),
+    duplicateNewBtn: document.getElementById("duplicateNewBtn"),
+
     screenThanks: document.getElementById("screen-thanks"),
     backLink: document.getElementById("backLink"),
     countdownNumber: document.getElementById("countdownNumber"),
@@ -52,7 +57,8 @@
   const state = {
     selectedOperation: null, // objeto de CONFIG.operations
     menuData: null,          // respuesta de GoogleAPI.getMenu
-    countdownInterval: null
+    countdownInterval: null,
+    pendingOrder: null       // datos del pedido mientras se muestra el aviso de duplicado
   };
 
   /* ============================================================
@@ -76,6 +82,11 @@
     document.getElementById("thankYouTitle").textContent = t.thankYouTitle;
     document.getElementById("thankYouMessage").textContent = t.thankYouMessage;
     document.getElementById("backLink").textContent = t.backLinkText;
+    document.getElementById("duplicateTitle").textContent = t.duplicateTitle;
+    document.getElementById("duplicateMessage").textContent = t.duplicateMessage;
+    document.getElementById("duplicateCancelBtn").textContent = t.duplicateCancelBtn;
+    document.getElementById("duplicateModifyBtn").textContent = t.duplicateModifyBtn;
+    document.getElementById("duplicateNewBtn").textContent = t.duplicateNewBtn;
     document.title = t.appTitle;
   }
 
@@ -129,6 +140,29 @@
     });
 
     els.orderForm.addEventListener("submit", handleSubmitOrder);
+
+    // ---- Aviso de legajo duplicado: 3 opciones ----
+    els.duplicateCancelBtn.addEventListener("click", () => {
+      // Cancela la operación: no se envía nada, el formulario
+      // queda tal cual estaba para que el usuario pueda corregirlo.
+      state.pendingOrder = null;
+      closeDuplicateModal();
+    });
+
+    els.duplicateModifyBtn.addEventListener("click", () => {
+      // Sobreescribe el pedido anterior con los datos actuales
+      // del formulario.
+      if (!state.pendingOrder) return;
+      attemptSubmitOrder({ overwrite: true });
+    });
+
+    els.duplicateNewBtn.addEventListener("click", () => {
+      // Registra un segundo pedido (duplicado), que se cobra
+      // 100% al colaborador.
+      if (!state.pendingOrder) return;
+      attemptSubmitOrder({ forceNew: true });
+    });
+
     els.backLink.addEventListener("click", (e) => {
       e.preventDefault();
       finishThanksFlow();
@@ -287,12 +321,24 @@
     els.orderForm.reset();
     clearAllFieldErrors();
     els.formGeneralError.classList.add("hidden");
+    state.pendingOrder = null;
+    closeDuplicateModal();
     els.orderModal.classList.remove("hidden");
     els.nameField.focus();
   }
 
   function closeModal() {
     els.orderModal.classList.add("hidden");
+    state.pendingOrder = null;
+    closeDuplicateModal();
+  }
+
+  function openDuplicateModal() {
+    els.duplicateModal.classList.remove("hidden");
+  }
+
+  function closeDuplicateModal() {
+    els.duplicateModal.classList.add("hidden");
   }
 
   function populateFormSelects() {
@@ -355,7 +401,7 @@
     e.preventDefault();
     if (!validateForm()) return;
 
-    submitOrder();
+    attemptSubmitOrder({});
   }
 
   function validateForm() {
@@ -414,7 +460,13 @@
     [els.dayField, els.lugarField, els.nameField, els.legajoField, els.comidaField, els.postreField].forEach(clearFieldError);
   }
 
-  async function submitOrder() {
+  /* Arma el pedido a partir del formulario y lo envía. `extraFields`
+     permite mandar las banderas "overwrite" o "forceNew" cuando el
+     usuario ya eligió qué hacer con un legajo duplicado (ver más
+     abajo). Sin esas banderas, es un envío normal: si el backend
+     detecta que ese legajo ya pidió ese día, no guarda nada y
+     devuelve duplicate:true para mostrar el aviso con las 3 opciones. */
+  async function attemptSubmitOrder(extraFields) {
     const [dayLabel, dayDate] = els.dayField.value.split("|");
 
     const order = {
@@ -428,31 +480,48 @@
       // Vacío ("") en operaciones que no usan este campo, para que
       // la columna "Lugar" en la planilla quede en blanco sin romper
       // el orden de columnas.
-      lugar: els.lugarFieldWrapper.classList.contains("hidden") ? "" : els.lugarField.value
+      lugar: els.lugarFieldWrapper.classList.contains("hidden") ? "" : els.lugarField.value,
+      ...extraFields
     };
 
-    els.confirmOrderBtn.disabled = true;
+    setOrderButtonsDisabled(true);
     els.formGeneralError.classList.add("hidden");
 
     try {
       const result = await GoogleAPI.submitOrder(order);
 
-      if (result.duplicate) {
-        showFormError("Ya registramos un pedido con este legajo para el día seleccionado.");
+      // Primer intento (sin overwrite/forceNew) y el backend avisa
+      // que ese legajo ya tiene un pedido ese día: no se guardó
+      // nada todavía, mostramos el aviso con las 3 opciones.
+      if (result.duplicate && !extraFields.overwrite && !extraFields.forceNew) {
+        state.pendingOrder = order;
+        openDuplicateModal();
         return;
       }
+
       if (!result.success) {
+        closeDuplicateModal();
         showFormError(result.error || "No pudimos registrar tu pedido. Intentá nuevamente.");
         return;
       }
 
+      state.pendingOrder = null;
+      closeDuplicateModal();
       closeModal();
-      showThanksScreen();
+      showThanksScreen(!!result.charged);
     } catch (err) {
+      closeDuplicateModal();
       showFormError(err.message || "Ocurrió un error al enviar el pedido.");
     } finally {
-      els.confirmOrderBtn.disabled = false;
+      setOrderButtonsDisabled(false);
     }
+  }
+
+  function setOrderButtonsDisabled(disabled) {
+    els.confirmOrderBtn.disabled = disabled;
+    els.duplicateCancelBtn.disabled = disabled;
+    els.duplicateModifyBtn.disabled = disabled;
+    els.duplicateNewBtn.disabled = disabled;
   }
 
   function showFormError(message) {
@@ -463,7 +532,11 @@
   /* ============================================================
      Pantalla de agradecimiento con cuenta regresiva
      ============================================================ */
-  function showThanksScreen() {
+  function showThanksScreen(charged) {
+    document.getElementById("thankYouMessage").textContent = charged
+      ? (CONFIG.text.thankYouMessageCharged || CONFIG.text.thankYouMessage)
+      : CONFIG.text.thankYouMessage;
+
     els.screenThanks.classList.remove("hidden");
     let seconds = CONFIG.text.countdownSeconds;
     els.countdownNumber.textContent = seconds;

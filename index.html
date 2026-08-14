@@ -164,6 +164,30 @@
 </div>
 
 <!-- ============================================================
+     MODAL: Aviso de legajo duplicado (mismo legajo + mismo día)
+     Aparece cuando el backend detecta que ese legajo ya tiene un
+     pedido registrado para el día elegido. Se muestra por encima
+     del formulario, que queda intacto detrás por si el usuario
+     elige "Cancelar".
+     ============================================================ -->
+<div id="duplicateModal" class="modal-overlay hidden">
+  <div class="modal-card duplicate-card">
+    <div class="duplicate-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h2 id="duplicateTitle">Ya existe un pedido con este legajo</h2>
+    <p id="duplicateMessage" class="duplicate-message">
+      Ya se registró un pedido con este legajo para el día seleccionado.
+      Si confirmás un segundo pedido, se cobrará el 100% del valor al colaborador.
+    </p>
+
+    <div class="duplicate-actions">
+      <button id="duplicateNewBtn" class="btn btn-primary btn-large">Nuevo pedido (100%)</button>
+      <button id="duplicateModifyBtn" class="btn btn-secondary btn-large">Modificar pedido</button>
+      <button id="duplicateCancelBtn" class="btn btn-text btn-large">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
      PANTALLA 3: Agradecimiento / confirmación
      ============================================================ -->
 <div id="screen-thanks" class="screen-overlay hidden">
